@@ -1,3 +1,4 @@
+import assertion from 'brillout/assertion-js'
 
 var hide_flickering = (function(){
     var opacity_saved;
@@ -103,7 +104,7 @@ function refine(element, width_target, height_target) {
                 number_of_no_resize + 1 :
                 0;
         if( number_of_no_resize === 10 ) {
-            dev_warning('incrementing/decrementing font-size does not change size of element');
+            assertion.assert(false, 'set_text_dimensions-js: incrementing/decrementing font-size does not change size of element');
             return;
         }
         if( current.width > width_target || current.height > height_target ) {
@@ -117,7 +118,7 @@ function refine(element, width_target, height_target) {
             current.fontSize + (too_big?-1:1)*(Math.ceil(current.fontSize/50))
         );
     }
-    dev_warning('maximum number of iterations has been reached to compute font size');
+    assertion.assert(false, 'set_text_dimensions-js: maximum number of iterations has been reached to compute font size');
 } 
 
 function set_fontSize(element, fontSize) { 
@@ -136,7 +137,3 @@ function get_computed_size(element) {
 function get_computed_style(element, prop){ 
     return document.defaultView.getComputedStyle(element,null).getPropertyValue(prop);
 } 
-
-function dev_warning(msg) {
-    console&&console.log&&console.log('set-text-dimensions.js: warning: '+msg);
-}
