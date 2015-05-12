@@ -1,9 +1,8 @@
 {
-  "main": "assertion.js",
+  "main": "src/set-text-size.js",
   "jspm": {
     "directories": {
-      "baseURL": "."
-    },
-    "dependencies": {}
+      "baseURL": "src"
+    }
   }
 }

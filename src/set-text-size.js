@@ -12,71 +12,72 @@ var hide_flickering = (function(){
     }
 })();
 
+var hidden_clone = (function(){
+    var clone;
+    return {
+        generate: function(element){
+            clone = deep_clone(element);
+
+            clone.style.fontSize = '40px';
+
+            clone.style.display='inline-block';
+
+            clone.style.position='absolute';
+            clone.style.top='0';
+            clone.style.left='0';
+            clone.style.top='-9999px';
+            clone.style.zIndex='-9999';
+            clone.style.visibility='hidden';
+
+            //append to element's parent in order to inherit same css properties
+            element.parentNode.appendChild(clone);
+
+            return clone;
+
+            function deep_clone(el){
+                if( !el.tagName )
+                    return document.createTextNode(el.textContent);
+
+                var node = document.createElement(el.tagName);
+
+                //don't use computed css values in order to preserve percentage values
+                node.style.cssText = el.style.cssText;
+
+                for(var i=0;i<el.childNodes.length;i++) {
+                    node.appendChild(deep_clone(el.childNodes[i]));
+                }
+
+                return node;
+            }
+        },
+        remove: function(){
+            clone.parentNode.removeChild(clone);
+        }
+    };
+})();
+
 export default function(element, width_target, height_target){
 
-    element = generate_hidden_clone(element);
+    var clone = hidden_clone.generate(element);
 
-    hide_flickering.activate(element);
+    //hide_flickering.activate(clone);
 
-    window.el = element;
-    estimate(element, width_target, height_target);
+    estimate(clone, width_target, height_target);
 
-    refine(element, width_target, height_target);
+    refine(clone, width_target, height_target);
 
-    hide_flickering.deactivate(element);
+    //hide_flickering.deactivate(clone);
 
-    var current = get_computed_size(element);
+    var current = get_computed_size(clone);
     current.ratio = current.height / current.width;
 
-    //element.parentNode.removeChild(element);
+    hidden_clone.remove();
 
     return current;
 
 };
 
-function generate_hidden_clone(element) {
-    var clone = deep_clone(element)
-
-    clone.style.fontSize = '40px';
-
-    clone.style.display='inline-block';
-
-    clone.style.position='absolute';
-    clone.style.top='0';
-    clone.style.left='0';
-    clone.style.top='-9999px';
-    clone.style.zIndex='-9999';
-    clone.style.visibility='hidden';
-
-    element.parentNode.appendChild(clone);
-
-    return clone;
-
-    function deep_clone(el){
-        if( !el.tagName )
-            return document.createTextNode(el.textContent);
-
-        var node = document.createElement(el.tagName);
-
-        /*
-        var computed_style = document.defaultView.getComputedStyle(el,null);
-        for(var prop in computed_style) {
-            if( ['width','height'].indexOf(prop) === -1 )
-                node.style[prop] = computed_style.getPropertyValue(prop);
-        }
-        */
-        node.style.cssText = el.style.cssText;
-
-        for(var i=0;i<el.childNodes.length;i++) {
-            node.appendChild(deep_clone(el.childNodes[i]));
-        }
-
-        return node;
-    }
-
-}
-
-function estimate(element, width_target, height_target) {
+function estimate(element, width_target, height_target) { 
     // Assume that element's size scales with increasing/decreasing font size
     // I.e. width / fontSize = `a constant value for every font size`, same for height
     // This assumption is not true but a good approximation
@@ -87,9 +88,9 @@ function estimate(element, width_target, height_target) {
         element,
         current.fontSize * Math.min(width_target/current.width, height_target/current.height)
     );
-}
+} 
 
-function refine(element, width_target, height_target) {
+function refine(element, width_target, height_target) { 
     var max_iter = 1000;
     var too_big = false;
     var previous;
@@ -117,12 +118,12 @@ function refine(element, width_target, height_target) {
         );
     }
     dev_warning('maximum number of iterations has been reached to compute font size');
-}
+} 
 
-function set_fontSize(element, fontSize) {
+function set_fontSize(element, fontSize) { 
     element.style.fontSize = fontSize + 'px';
-}
-function get_computed_size(element) {
+} 
+function get_computed_size(element) { 
     function get_computed_style_int(element, prop){
         return parseInt(get_computed_style(element, prop),10);
     }
@@ -131,10 +132,10 @@ function get_computed_size(element) {
         height: get_computed_style_int(element, 'height'),
         fontSize: get_computed_style_int(element, 'font-size')
     };
-}
-function get_computed_style(element, prop){
+} 
+function get_computed_style(element, prop){ 
     return document.defaultView.getComputedStyle(element,null).getPropertyValue(prop);
-}
+} 
 
 function dev_warning(msg) {
     console&&console.log&&console.log('set-text-dimensions.js: warning: '+msg);
