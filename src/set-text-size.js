@@ -63,6 +63,8 @@ export default function(element, width_target, height_target){
 
     //hide_flickering.activate(clone);
 
+    assertion.assert(clone.textContent, "set_text_dimensions-js: element has no text: "+element);
+
     estimate(clone, width_target, height_target);
 
     refine(clone, width_target, height_target);
