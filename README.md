@@ -39,3 +39,8 @@ A more interesting demo on <a href='http://brillout.github.io/set-text-dimension
 <a href='http://msgtab.brillout.com'>msgtab.brillout.com</a>
 
 <a href='http://www.clocktab.com'>clocktab.com</a>
+
+
+### Credits
+
+<a href='http://www.joachim-breitner.de'>Joachim Breitner</a> for the <a href='https://github.com/brillout/set-text-dimensions/blob/d7ee0ebd328101cd5613e2fbb9961839b2f0902f/index.js#L84-L95'>approximation idea</a>
