@@ -1,11 +1,8 @@
 {
-  "main": "src/set-text-size.js",
+  "main": "index.js",
   "jspm": {
     "directories": {
-      "baseURL": "src"
-    },
-    "dependencies": {
-      "brillout/assertion-js": "github:brillout/assertion-js@^1.0.1"
+      "baseURL": "."
     }
   }
 }

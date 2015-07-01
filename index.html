@@ -1,1 +1,53 @@
-<b>yep</b>
+<title>Demo</title>
+
+<style>
+    #wrapper{
+        overflow: hidden;
+        resize: both;
+        border: 1px solid black;
+        width: 0px;
+        height: 0px;
+        min-width: 0px;
+        min-height: 0px;
+        max-width: 10000px;
+        max-height: 10000px;
+    }
+    #text{
+        white-space: nowrap;
+    }
+</style>
+
+<div id='wrapper'>
+    <span id='text'>resize me</span>
+</div>
+
+<script src='index.js'></script>
+<script>
+    var wrapper = document.getElementById('wrapper');
+    var text = document.getElementById('text');
+
+    wrapper.style.width = '200px';
+    wrapper.style.height = '20px';
+
+    wrapper.onresize = resize();
+    setInterval(resize, 300);
+    resize();
+
+    function resize(){
+        var computation =
+            set_text_dimensions(
+                text,
+                get_dim(wrapper, 'width'),
+                get_dim(wrapper, 'height'));
+
+        text.style.fontSize = computation.fontSize;
+
+        console.log(computation);
+
+        function get_dim(element, dim) {
+            return parseInt(document.defaultView.getComputedStyle(element,null).getPropertyValue(dim),10);
+        }
+    }
+
+    function assert(bool, msg){ if( !bool ) throw msg; }
+</script>
